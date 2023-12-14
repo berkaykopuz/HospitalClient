@@ -57,8 +57,9 @@ namespace HospitalClient.Controllers
                 Console.WriteLine("Hospital başarıyla oluşturuldu!");
                 return RedirectToAction("Index");
             }
-            
+
             return View(hospital);
+            
         }
     }
 }

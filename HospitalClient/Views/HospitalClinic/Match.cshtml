@@ -1,0 +1,15 @@
+﻿@model HospitalClient.ViewModels.HospitalClinicViewModel
+
+<form method="post" asp-action="Match">
+    
+    <div class="form-group">
+        <label for="selectedHospital">Select a Hospital:</label>
+        @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="selectedHospital">Select a Clinic:</label>
+        @Html.DropDownListFor(model => model.SelectedClinicId, new SelectList(Model.Clinics, "Id", "Name"), "Select a Clinic", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Eşleştir</button>
+</form>
