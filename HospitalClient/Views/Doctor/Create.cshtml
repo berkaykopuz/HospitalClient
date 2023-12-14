@@ -1,0 +1,20 @@
+﻿@model HospitalClient.ViewModels.DoctorViewModel
+
+<form method="post" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Name">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" class="form-control" placeholder="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="selectedHospital">Select a Hospital:</label>
+        @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Oluştur</button>
+</form>
