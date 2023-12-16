@@ -58,5 +58,7 @@ namespace HospitalClient.Controllers
 
             return View(clinic);
         }
+
+
     }
 }
