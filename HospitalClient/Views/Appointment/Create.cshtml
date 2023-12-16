@@ -57,8 +57,8 @@
                 @Html.DropDownListFor(model => model.SelectedDoctorId, doctorList, "Select a Doctor", new { @class = "form-control" })
             </div>
             <div class="form-group">
-                <label for="AppointmentDate">Randevu Tarihi:</label>
-                <input type="datetime" class="form-control" id="AppointmentDate" name="AppointmentDate" step="3600000">
+                <label for="Date">Randevu Tarihi:</label>
+                <input type="datetime-local" class="form-control" id="Date" name="Date" step="3600">
             </div>
             
             <button type="submit" class="btn btn-primary">Randevu Al</button>
