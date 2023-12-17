@@ -55,19 +55,19 @@ namespace HospitalClient.Controllers
                 TokenResponse tokenResponse = JsonSerializer.Deserialize<TokenResponse>(jsonString);
 
                 List<string> roles = tokenResponse.Roles;
-                string jwtToken = tokenResponse.Token;
+                string jwt = tokenResponse.Token;
 
                 foreach(var role in roles)
                 {
                     if (role.Equals("Admin"))
                     {
                         HttpContext.Session.SetString("role", role);
-                        HttpContext.Session.SetString("token", jwtToken);
+                        HttpContext.Session.SetString("token", jwt);
                     }
                     else if (role.Equals("User"))
                     {
                         HttpContext.Session.SetString("role", role);
-                        HttpContext.Session.SetString("token", jwtToken);
+                        HttpContext.Session.SetString("token", jwt);
                     }
                 }
 

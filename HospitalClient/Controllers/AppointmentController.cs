@@ -1,5 +1,7 @@
-﻿using HospitalClient.Models;
+﻿using HospitalClient.Data;
+using HospitalClient.Models;
 using HospitalClient.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -32,8 +34,9 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Create(AppointmentViewModel viewModel)
         {
             _viewModel = viewModel;
+            
 
-            if (_viewModel.SelectedClinicId != 0)
+            if (_viewModel.SelectedClinicId != 0) // select clinic for getting hospitals
             {
 
                 HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("/api/HospitalClinic/GetHospitalsByClinicId/" + _viewModel.SelectedClinicId);
@@ -49,7 +52,7 @@ namespace HospitalClient.Controllers
                 }
             }
 
-            if (_viewModel.SelectedHospitalId != 0)
+            if (_viewModel.SelectedHospitalId != 0) // select hospital for getting doctors
             {
                 HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/GetDoctorsByHospitalId/" + _viewModel.SelectedHospitalId);
 
@@ -62,6 +65,29 @@ namespace HospitalClient.Controllers
 
                     return View(_viewModel);
                 }
+            }
+
+            if(_viewModel.SelectedDoctorId != 0) // last step, doctor is chosen so can create appointment
+            {
+                var jwt = HttpContext.Session.GetString("token");
+                var citizenId = JwtHelper.DecodeCitizenJwtToken(jwt, Secret.SecretKey);
+
+                AppointmentRequest request = new AppointmentRequest
+                {
+                    date = _viewModel.Date,
+                    citizenId = citizenId,
+                    doctorId = _viewModel.SelectedDoctorId
+                };
+                
+                HttpResponseMessage appointmentResponse = await _httpClient.PostAsJsonAsync("api/Appointment/create", request);
+
+                if (appointmentResponse.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Appointment başarıyla oluşturuldu!");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return View(appointmentResponse);
             }
 
             HttpResponseMessage clinicResponse = await _httpClient.GetAsync("/api/Clinic");
