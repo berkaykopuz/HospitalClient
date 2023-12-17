@@ -1,0 +1,42 @@
+﻿@model HospitalClient.ViewModels.LoginViewModel
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col align-self-center">
+            <div class="card">
+                <div class="card-header text-center">
+                    Giriş Yap
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <form method="post" asp-action="Login" >
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label">Email Adresi</label>
+                                <input type="text" class="form-control" asp-for="Email">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label">Şifre</label>
+                                <input type="password" class="form-control" asp-for="Password">
+                            </div>
+                            @*<div class="mb-2 form-check">
+                                <input type="checkbox" class="form-check-input" id="Check">
+                                <label class="form-check-label" for="Check">Beni Hatırla</label>
+                            </div>*@
+                            <div class="mb-3">
+                                <a class="link-opacity-75-hover fs-6" asp-action="Register">Kayıtlı değil misin?</a>
+                            </div>
+                            <div class="row justify-content-center">
+                                <button type="submit" class="btn btn-primary justify-content-end col-3">Giriş</button>
+                            </div>
+                        </form>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+</div>

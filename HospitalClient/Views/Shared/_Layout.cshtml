@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var httpContext = ViewContext.HttpContext;
+    var role = httpContext.Session.GetString("role");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,33 +26,60 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Index">Hospitals</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Create">Hospital Create</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Create">Doctor Create</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Index">Doctors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Create">Clinic Create</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Index">Clinics</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="HospitalClinic" asp-action="Match">Match</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Create">Appointment</a>
-                        </li>
+                        @{
+                            if (role == "Admin")
+                            {
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Index">Hospitals</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Create">Hospital Create</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Create">Doctor Create</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Index">Doctors</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Create">Clinic Create</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Index">Clinics</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="HospitalClinic" asp-action="Match">Match</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">LOGOUT</a>
+                                </li>
+                            }
+
+                            else if(role == "User")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Create">Appointment</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">LOGOUT</a>
+                                </li>
+                            }
+
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Register">Register</a>
+                                </li>
+                            }
+                        }
+
+                       
+                         
+                        
+                        
                     </ul>
                 </div>
             </div>
