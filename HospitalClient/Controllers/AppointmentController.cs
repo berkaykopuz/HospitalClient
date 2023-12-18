@@ -122,5 +122,7 @@ namespace HospitalClient.Controllers
 
             return View(_viewModel);
         }
+
+
     }
 }

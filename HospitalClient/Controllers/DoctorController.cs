@@ -81,5 +81,40 @@ namespace HospitalClient.Controllers
 
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+
+            HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/" + id);
+            if (doctorResponse.IsSuccessStatusCode)
+            {
+                var jsonString = await doctorResponse.Content.ReadAsStringAsync();
+                var doctor = JsonSerializer.Deserialize<Doctor>(jsonString);
+
+                DoctorDetailViewModel viewModel = new DoctorDetailViewModel
+                {
+                    Name = doctor.Name,
+                    Email = doctor.Email,
+                    Hospital = doctor.Hospital,
+                    Appointments = doctor.Appointments,
+                };
+                HttpResponseMessage appointmentResponse = await _httpClient.GetAsync("/api/Appointment/getbydoctorid/" + id);
+
+                if (appointmentResponse.IsSuccessStatusCode)
+                {
+                    var jsonString2 = await appointmentResponse.Content.ReadAsStringAsync();
+                    var appointments = JsonSerializer.Deserialize<List<Appointment>>(jsonString2);
+
+                    viewModel.Appointments = appointments;
+
+                    return View(viewModel);
+                }
+
+            }
+
+            return View("Index", "Home");
+            
+        }
     }
 }

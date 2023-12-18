@@ -61,8 +61,17 @@
                 <input type="datetime-local" class="form-control" id="Date" name="Date" step="3600">
             </div>
             
-
-            <button type="submit" class="btn btn-primary">Randevu Al</button>
+            @{
+                if(Model.Doctors != null)
+                {
+                    <button type="submit" class="btn btn-primary">Randevu Al</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary">Devam Et</button>
+                }
+            }
+            
         </form>
     </div>
 
