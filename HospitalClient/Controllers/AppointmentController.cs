@@ -78,8 +78,21 @@ namespace HospitalClient.Controllers
                     citizenId = citizenId,
                     doctorId = _viewModel.SelectedDoctorId
                 };
-                
+
+                HttpResponseMessage isTakenResponse = await _httpClient.PostAsJsonAsync("/api/Appointment/istaken", request);
+                if(isTakenResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await isTakenResponse.Content.ReadAsStringAsync();
+                    var isTaken = JsonSerializer.Deserialize<bool>(jsonString);
+
+                    if (isTaken)
+                    {
+                        return View("AlreadyTaken");
+                    }
+                }
+
                 HttpResponseMessage appointmentResponse = await _httpClient.PostAsJsonAsync("api/Appointment/create", request);
+
 
                 if (appointmentResponse.IsSuccessStatusCode)
                 {
