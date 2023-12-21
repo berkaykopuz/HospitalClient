@@ -2,12 +2,14 @@
 using HospitalClient.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace HospitalClient.Controllers
 {
+
     public class CitizenController : Controller
     {
         private readonly HttpClient _httpClient;

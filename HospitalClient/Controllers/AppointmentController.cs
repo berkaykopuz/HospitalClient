@@ -28,11 +28,23 @@ namespace HospitalClient.Controllers
         }
         public IActionResult Index()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("User"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             return View();
         }
 
         public async Task<IActionResult> Create(AppointmentViewModel viewModel)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("User"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             _viewModel = viewModel;
             
 

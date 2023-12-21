@@ -39,12 +39,24 @@ namespace HospitalClient.Controllers
 
         public IActionResult Create()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Hospital hospital)
-        {  
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(hospital);
@@ -61,5 +73,11 @@ namespace HospitalClient.Controllers
             return View(hospital);
             
         }
+
+        /*[HttpPut]
+        public async Task<IActionResult> Update(Hospital)
+        {
+
+        }*/
     }
 }

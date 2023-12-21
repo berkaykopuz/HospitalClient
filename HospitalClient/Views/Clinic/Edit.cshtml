@@ -1,0 +1,14 @@
+﻿@model Clinic
+
+<form method="post" asp-controller="Clinic" asp-action="EditResponse">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Name">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" name="_method" value="put" />
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

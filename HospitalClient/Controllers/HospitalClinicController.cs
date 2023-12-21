@@ -29,6 +29,12 @@ namespace HospitalClient.Controllers
 
         public async Task<IActionResult> Match() {
 
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("api/Hospital");
             HttpResponseMessage clinicResponse = await _httpClient.GetAsync("api/Clinic");
 
@@ -57,6 +63,12 @@ namespace HospitalClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Match(HospitalClinicViewModel viewModel)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             HospitalClinic hospitalClinic = new HospitalClinic
             {
                 HospitalId = viewModel.SelectedHospitalId,

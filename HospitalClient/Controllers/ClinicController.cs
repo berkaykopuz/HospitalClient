@@ -22,6 +22,12 @@ namespace HospitalClient.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             HttpResponseMessage response = await _httpClient.GetAsync("api/Clinic");
 
             if (response.IsSuccessStatusCode)
@@ -37,12 +43,24 @@ namespace HospitalClient.Controllers
 
         public IActionResult Create()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Clinic clinic)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(clinic);
@@ -59,6 +77,46 @@ namespace HospitalClient.Controllers
             return View(clinic);
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            HttpResponseMessage response = await _httpClient.GetAsync("api/Clinic/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var clinic = JsonSerializer.Deserialize<Clinic>(jsonString);
+
+                return View(clinic);
+            }
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditResponse(Clinic clinic)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync("/api/Clinic/update/" + clinic.Id, clinic);
+
+            if(response.IsSuccessStatusCode)
+            {
+                Console.WriteLine(response.Content);
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
 
     }
 }

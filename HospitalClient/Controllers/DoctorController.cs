@@ -1,6 +1,15 @@
-﻿using HospitalClient.Models;
+﻿using HospitalClient.Data;
+using HospitalClient.Models;
 using HospitalClient.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace HospitalClient.Controllers
@@ -11,6 +20,7 @@ namespace HospitalClient.Controllers
 
         public DoctorController()
         {
+
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://localhost:7029")
@@ -22,6 +32,8 @@ namespace HospitalClient.Controllers
             );
         }
 
+        
+
         public async Task<IActionResult> Index()
         {
             HttpResponseMessage response = await _httpClient.GetAsync("api/Doctor");
@@ -29,7 +41,7 @@ namespace HospitalClient.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var doctors = JsonSerializer.Deserialize<List<Doctor>>(jsonString);
+                var doctors = System.Text.Json.JsonSerializer.Deserialize<List<Doctor>>(jsonString);
 
                 return View(doctors);
             }
@@ -37,12 +49,18 @@ namespace HospitalClient.Controllers
         }
         public async Task<IActionResult> Create()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("api/Hospital");
 
             if (hospitalResponse.IsSuccessStatusCode)
             {
                 var jsonString = await hospitalResponse.Content.ReadAsStringAsync();
-                var hospitals = JsonSerializer.Deserialize<List<Hospital>>(jsonString);
+                var hospitals = System.Text.Json.JsonSerializer.Deserialize<List<Hospital>>(jsonString);
 
                 DoctorViewModel doctorViewModel = new DoctorViewModel();
                 doctorViewModel.Hospitals = hospitals;
@@ -56,7 +74,13 @@ namespace HospitalClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(DoctorViewModel doctorViewModel)
         {
-            if(!ModelState.IsValid)
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            if (!ModelState.IsValid)
             {
                 return View(doctorViewModel);
             }
@@ -85,12 +109,18 @@ namespace HospitalClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
 
             HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/" + id);
             if (doctorResponse.IsSuccessStatusCode)
             {
                 var jsonString = await doctorResponse.Content.ReadAsStringAsync();
-                var doctor = JsonSerializer.Deserialize<Doctor>(jsonString);
+                var doctor = System.Text.Json.JsonSerializer.Deserialize<Doctor>(jsonString);
 
                 DoctorDetailViewModel viewModel = new DoctorDetailViewModel
                 {
@@ -99,12 +129,12 @@ namespace HospitalClient.Controllers
                     Hospital = doctor.Hospital,
                     Appointments = doctor.Appointments,
                 };
-                HttpResponseMessage appointmentResponse = await _httpClient.GetAsync("/api/Appointment/getbydoctorid/" + id);
+                HttpResponseMessage appointmentResponse = await _httpClient.GetAsync("/api/Appointment/getbydoctorid/?id=" + id);
 
                 if (appointmentResponse.IsSuccessStatusCode)
                 {
                     var jsonString2 = await appointmentResponse.Content.ReadAsStringAsync();
-                    var appointments = JsonSerializer.Deserialize<List<Appointment>>(jsonString2);
+                    var appointments = System.Text.Json.JsonSerializer.Deserialize<List<Appointment>>(jsonString2);
 
                     viewModel.Appointments = appointments;
 
@@ -115,6 +145,70 @@ namespace HospitalClient.Controllers
 
             return View("Index", "Home");
             
+        }
+        
+        public async Task<IActionResult> Edit(int id)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/" + id);
+
+            if (doctorResponse.IsSuccessStatusCode)
+            {
+                var jsonString = await doctorResponse.Content.ReadAsStringAsync();
+                var doctor = System.Text.Json.JsonSerializer.Deserialize<Doctor>(jsonString);
+
+                DoctorViewModel viewModel = new DoctorViewModel
+                {
+                    Id = id,
+                    Name = doctor.Name,
+                    Email = doctor.Email,
+                };
+
+                HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("api/Hospital");
+
+                if (hospitalResponse.IsSuccessStatusCode)
+                {
+                    var jsonString2 = await hospitalResponse.Content.ReadAsStringAsync();
+                    var hospitals = System.Text.Json.JsonSerializer.Deserialize<List<Hospital>>(jsonString2);
+
+                    viewModel.Hospitals = hospitals;
+
+                    return View(viewModel);
+                }
+            }
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditResponse(DoctorViewModel viewModel)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            Doctor doctor = new Doctor
+            {
+                Id = viewModel.Id,
+                Name = viewModel.Name,
+                Email = viewModel.Email,
+            };
+
+            HttpResponseMessage doctorResponse = await _httpClient.PutAsJsonAsync("/api/Doctor/update/" + viewModel.Id + "?hospitalId=" + viewModel.SelectedHospitalId, doctor);
+            if(doctorResponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine(doctorResponse.Content);
+                return RedirectToAction("Index");
+            }
+
+            return View();
         }
     }
 }
