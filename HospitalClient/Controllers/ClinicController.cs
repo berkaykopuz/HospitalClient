@@ -118,5 +118,24 @@ namespace HospitalClient.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            HttpResponseMessage clinicResponse = await _httpClient.DeleteAsync("/api/Clinic/delete/" + id);
+            if (clinicResponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine(clinicResponse.Content);
+                return RedirectToAction("Index");
+            }
+
+            return View("Index");
+
+        }
+
     }
 }
