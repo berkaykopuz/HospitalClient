@@ -229,5 +229,54 @@ namespace HospitalClient.Controllers
             return View("Index");
 
         }
+
+        public async Task<IActionResult> AssignWorkHours(int id)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            TimingViewModel timingViewModel = new TimingViewModel();
+            timingViewModel.DoctorId = id;
+
+            return View(timingViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignWorkHours(TimingViewModel timingViewModel)
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (!role.Equals("Admin"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            if(timingViewModel.SelectedShiftStart > timingViewModel.SelectedShiftEnd)
+            {
+                return View("Index", "Home");   // error should be here
+            }
+
+            Timing timing = new Timing
+            {
+                WorkDay = timingViewModel.WorkDay,
+                ShiftStart = timingViewModel.SelectedShiftStart,
+                ShiftEnd = timingViewModel.SelectedShiftEnd
+            };
+            
+
+            HttpResponseMessage timingResponse = await _httpClient.PostAsJsonAsync("/api/Timing/create?doctorId=" + 
+                timingViewModel.DoctorId
+                , timing);
+
+            if (timingResponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine(timingResponse.Content);
+                return RedirectToAction("Index");
+            }
+
+            return View("Index", "Home");
+        }
     }
 }

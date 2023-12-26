@@ -1,0 +1,21 @@
+﻿@model HospitalClient.ViewModels.TimingViewModel
+
+<form method="post" asp-action="AssignWorkHours">
+    <input asp-for="DoctorId" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="WorkDay">Work Day</label>
+        <input type="date" asp-for="WorkDay" class="form-control" placeholder="Date">
+        <span asp-validation-for="WorkDay" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="selectedShiftStart">Select Beginning Hour:</label>
+        @Html.DropDownListFor(model => model.SelectedShiftStart, new SelectList(Model.ShiftStarts), "Select Beginning Time", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="selectedShiftStart">Select Ending Hour:</label>
+        @Html.DropDownListFor(model => model.SelectedShiftEnd, new SelectList(Model.ShiftEnds), "Select Ending Time", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Oluştur</button>
+</form>
