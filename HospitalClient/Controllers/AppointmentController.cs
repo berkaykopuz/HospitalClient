@@ -91,6 +91,24 @@ namespace HospitalClient.Controllers
                     doctorId = _viewModel.SelectedDoctorId
                 };
 
+                HttpResponseMessage timingResponse = await _httpClient.GetAsync("/api/Timing?doctorId=" + request.doctorId); //checking for doctor work hours
+                if(timingResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await timingResponse.Content.ReadAsStringAsync();
+                    var timings = JsonSerializer.Deserialize<List<Timing>>(jsonString);
+
+                    foreach(var timing in timings)
+                    {
+                        if(timing.WorkDay.ToString("yyyy-MM-dd") == request.date.ToString("yyyy-MM-dd"))
+                        {
+                            if(request.date.Hour < timing.ShiftStart || request.date.Hour >= timing.ShiftEnd)
+                            {
+                                return View("AlreadyTaken");
+                            }
+                        }
+                    }
+                }
+
                 HttpResponseMessage isTakenResponse = await _httpClient.PostAsJsonAsync("/api/Appointment/istaken", request);
                 if(isTakenResponse.IsSuccessStatusCode)
                 {
