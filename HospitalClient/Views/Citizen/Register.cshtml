@@ -1,4 +1,8 @@
-﻿@model HospitalClient.ViewModels.RegisterViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model HospitalClient.ViewModels.RegisterViewModel
 <div class="container">
     <div class="row mt-5">
         <div class="col">
@@ -6,25 +10,25 @@
         <div class="col align-self-center">
             <div class="card">
                 <div class="card-header text-center">
-                    Kayıt Ol
+                    @_localization.Getkey("Register").Value
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <form method="post" asp-action="Register">
                             <div class="mb-3">
-                                <label asp-for="Name" class="form-label">Ad Soyad</label>
+                                <label asp-for="Name" class="form-label">@_localization.Getkey("Username").Value</label>
                                 <input type="text" class="form-control" asp-for="Name">
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Email" class="form-label">Email Adresi</label>
+                                <label asp-for="Email" class="form-label">@_localization.Getkey("EmailAddress").Value</label>
                                 <input type="email" class="form-control" asp-for="Email">
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Password" class="form-label">Şifre</label>
+                                <label asp-for="Password" class="form-label">@_localization.Getkey("Password").Value</label>
                                 <input type="password" class="form-control" asp-for="Password">
                             </div>
                             <div class="row justify-content-center">
-                                <input class="btn btn-outline-success float-right" type="submit" value="Sign up" />
+                                <input class="btn btn-outline-success float-right" type="submit" value="@_localization.Getkey("Submit").Value.ToString()" />
                             </div>
                         </form>
                     </blockquote>

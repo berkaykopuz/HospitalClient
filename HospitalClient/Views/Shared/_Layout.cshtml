@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HospitalClient</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HospitalClient.styles.css" asp-append-version="true" />
@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HospitalClient</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Randevu Sistemi</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,57 +24,87 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
                         @{
                             if (role == "Admin")
                             {
                                 <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Index">Hospitals</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Index">Doktorlar</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Create">Hospital Create</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Index">Hastaneler</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Create">Doctor Create</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Index">Klinikler</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Index">Doctors</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Hospital" asp-action="Create">Hastane Oluştur</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Create">Clinic Create</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Doctor" asp-action="Create">Doktor Oluştur</a>
+                                </li>
+ 
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Create">Klinik Oluştur</a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="HospitalClinic" asp-action="Match">Klinik Ata</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clinic" asp-action="Index">Clinics</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="HospitalClinic" asp-action="Match">Match</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">LOGOUT</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">ÇIKIŞ YAP</a>
                                 </li>
                             }
 
                             else if(role == "User")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Create">Appointment</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Create">Randevu Oluştur</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">LOGOUT</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">ÇIKIŞ YAP</a>
                                 </li>
                             }
 
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Login">Login</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Login">Giriş Yap</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Register">Register</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Register">Kayıt Ol</a>
                                 </li>
                             }
                         }
+
+                        <li>
+                            <div class="dropdown">
+                                <button type="button"
+                                        class="btn btn-primary dropdown-toggle"
+                                        data-bs-toggle="dropdown">
+                                    Dil Seç
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a asp-controller="Home"
+                                           asp-action="ChangeLanguage"
+                                           asp-route-culture="en-US"
+                                           class="dropdown-item">
+                                            <i class="flag-icon flag-icon-gb"></i> English
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Home"
+                                           asp-action="ChangeLanguage"
+                                           asp-route-culture="tr-TR"
+                                           class="dropdown-item">
+                                            <i class="flag-icon flag-icon-gb"></i> Türkçe
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
                        
                          

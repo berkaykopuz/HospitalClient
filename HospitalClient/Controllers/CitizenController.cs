@@ -108,5 +108,6 @@ namespace HospitalClient.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
     }
 }

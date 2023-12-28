@@ -1,4 +1,6 @@
-﻿@model HospitalClient.ViewModels.LoginViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@model HospitalClient.ViewModels.LoginViewModel
 <div class="container">
     <div class="row">
         <div class="col">
@@ -7,17 +9,18 @@
         <div class="col align-self-center">
             <div class="card">
                 <div class="card-header text-center">
-                    Giriş Yap
+                    @_localization.Getkey("Login").Value
                 </div>
                 <div class="card-body">
+                   
                     <blockquote class="blockquote mb-0">
                         <form method="post" asp-action="Login" >
                             <div class="mb-3">
-                                <label asp-for="Email" class="form-label">Email Adresi</label>
+                                <label asp-for="Email" class="form-label">@_localization.Getkey("EmailAddress").Value</label>
                                 <input type="text" class="form-control" asp-for="Email">
                             </div>
                             <div class="mb-3">
-                                <label asp-for="Password" class="form-label">Şifre</label>
+                                <label asp-for="Password" class="form-label">@_localization.Getkey("Password").Value</label>
                                 <input type="password" class="form-control" asp-for="Password">
                             </div>
                             @*<div class="mb-2 form-check">
@@ -25,10 +28,10 @@
                                 <label class="form-check-label" for="Check">Beni Hatırla</label>
                             </div>*@
                             <div class="mb-3">
-                                <a class="link-opacity-75-hover fs-6" asp-action="Register">Kayıtlı değil misin?</a>
+                                <a class="link-opacity-75-hover fs-6" asp-action="Register">@_localization.Getkey("Register").Value.ToString()</a>
                             </div>
                             <div class="row justify-content-center">
-                                <button type="submit" class="btn btn-primary justify-content-end col-3">Giriş</button>
+                                <button type="submit" class="btn btn-primary justify-content-end col-3">@_localization.Getkey("Submit").Value.ToString()</button>
                             </div>
                         </form>
                     </blockquote>
@@ -40,3 +43,5 @@
         </div>
     </div>
 </div>
+
+
