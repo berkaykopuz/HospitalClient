@@ -7,7 +7,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
+    <title>Hastane Randevu Sistemi</title>
+    <link rel="icon" href="~/css/favicon-32x32.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HospitalClient.styles.css" asp-append-version="true" />
@@ -63,8 +64,13 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Create">Randevu Oluştur</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="UserAppointments">Randevularım</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Citizen" asp-action="Logout">ÇIKIŞ YAP</a>
                                 </li>
+                                
+
                             }
 
                             else

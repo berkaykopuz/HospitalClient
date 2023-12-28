@@ -50,6 +50,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Create()
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -75,6 +79,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Create(DoctorViewModel doctorViewModel)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -110,6 +118,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Detail(int id)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -150,6 +162,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -189,6 +205,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> EditResponse(DoctorViewModel viewModel)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -214,6 +234,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -233,6 +257,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> AssignWorkHours(int id)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -248,6 +276,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> AssignWorkHours(TimingViewModel timingViewModel)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("Admin"))
             {
                 return RedirectToAction("AccessDenied", "Home");

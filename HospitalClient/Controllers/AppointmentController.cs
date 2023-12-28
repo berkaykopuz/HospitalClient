@@ -29,6 +29,10 @@ namespace HospitalClient.Controllers
         public IActionResult Index()
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("User"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -40,6 +44,10 @@ namespace HospitalClient.Controllers
         public async Task<IActionResult> Create(AppointmentViewModel viewModel)
         {
             var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
             if (!role.Equals("User"))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -96,16 +104,23 @@ namespace HospitalClient.Controllers
                 {
                     var jsonString = await timingResponse.Content.ReadAsStringAsync();
                     var timings = JsonSerializer.Deserialize<List<Timing>>(jsonString);
+                    bool control = false;
 
                     foreach(var timing in timings)
                     {
                         if(timing.WorkDay.ToString("yyyy-MM-dd") == request.date.ToString("yyyy-MM-dd"))
                         {
+                            control = true;
                             if(request.date.Hour < timing.ShiftStart || request.date.Hour >= timing.ShiftEnd)
                             {
-                                return View("AlreadyTaken");
+                                return View("NotAvailable");
                             }
                         }
+                    }
+
+                    if (!control)
+                    {
+                        return View("NotAvailable");
                     }
                 }
 
@@ -151,6 +166,33 @@ namespace HospitalClient.Controllers
             ModelState.Clear();
 
             return View(_viewModel);
+        }
+
+        public async Task<IActionResult> UserAppointments()
+        {
+            var role = HttpContext.Session.GetString("role");
+            if (role == null)
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+            if (!role.Equals("User"))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            var jwt = HttpContext.Session.GetString("token");
+            var citizenId = JwtHelper.DecodeCitizenJwtToken(jwt, Secret.SecretKey);
+
+            HttpResponseMessage appointmentResponse = await _httpClient.GetAsync("/api/Appointment/getbyuserid?id=" + citizenId);
+            if(appointmentResponse.IsSuccessStatusCode)
+            {
+                var jsonString = await appointmentResponse.Content.ReadAsStringAsync();
+                var appointments = JsonSerializer.Deserialize<List<Appointment>>(jsonString);
+
+                return View(appointments);
+            }
+
+            return RedirectToAction("Index", "Home"); // should be not found here
         }
 
 
