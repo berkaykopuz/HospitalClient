@@ -287,7 +287,7 @@ namespace HospitalClient.Controllers
 
             if(timingViewModel.SelectedShiftStart > timingViewModel.SelectedShiftEnd)
             {
-                return View("Index", "Home");   // error should be here
+                return RedirectToAction("Index", "Home");   // error should be here
             }
 
             Timing timing = new Timing

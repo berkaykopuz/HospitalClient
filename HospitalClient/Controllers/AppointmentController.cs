@@ -202,7 +202,7 @@ namespace HospitalClient.Controllers
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
-            if (!role.Equals("Admin"))
+            if (!role.Equals("User"))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
@@ -211,10 +211,10 @@ namespace HospitalClient.Controllers
             if (appointmentResponse.IsSuccessStatusCode)
             {
                 Console.WriteLine(appointmentResponse.Content);
-                return RedirectToAction("Index");
+                return RedirectToAction("UserAppointments", "Appointment");
             }
 
-            return View("Index", "Home"); //should be deleted 
+            return RedirectToAction("Index", "Home"); //should be deleted 
 
         }
 

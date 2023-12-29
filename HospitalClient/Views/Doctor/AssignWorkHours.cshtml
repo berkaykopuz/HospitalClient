@@ -10,12 +10,46 @@
     </div>
     <div class="form-group">
         <label for="selectedShiftStart">Vardiya Başlangıç Saati</label>
-        @Html.DropDownListFor(model => model.SelectedShiftStart, new SelectList(Model.ShiftStarts), "Select Beginning Time", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.SelectedShiftStart, new SelectList(Model.ShiftStarts), "Başlangıç Saati", new { @class = "form-control" })
     </div>
     <div class="form-group">
         <label for="selectedShiftStart">Vardiya Bitiş Saati</label>
-        @Html.DropDownListFor(model => model.SelectedShiftEnd, new SelectList(Model.ShiftEnds), "Select Ending Time", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.SelectedShiftEnd, new SelectList(Model.ShiftEnds), "Bitiş Saati", new { @class = "form-control" })
     </div>
 
-    <button type="submit" class="btn btn-primary">Oluştur</button>
+    <button type="submit" onclick="checkAppointmentDate()" class="btn btn-primary">Oluştur</button>
 </form>
+
+<script>
+    function checkAppointmentDate() {
+        var selectedDate = new Date(document.getElementById("WorkDay").value);
+        var currentDate = new Date();
+
+        
+
+        if (selectedDate < currentDate) {
+            alert("Çalışma tarihi şu andan önce olamaz!");
+            window.location.href = '/Home/Index';
+        } else {
+            return true;
+        }
+    }
+
+    function sendPostRequest() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '/Home/YourAction', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    console.log("İstek başarıyla tamamlandı!");
+                } else {
+                    console.error("İstekte bir hata oluştu.");
+                }
+            }
+        };
+
+        xhr.send();
+    }
+</script>

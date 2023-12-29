@@ -64,7 +64,7 @@
             @{
                 if(Model.Doctors != null)
                 {
-                    <button type="submit" class="btn btn-primary">Randevu Al</button>
+                    <button type="submit" onclick="checkAppointmentDate()" class="btn btn-primary">Randevu Al</button>
                 }
                 else
                 {
@@ -74,6 +74,38 @@
             
         </form>
     </div>
+
+    <script>
+        function checkAppointmentDate() {
+            var selectedDate = new Date(document.getElementById("Date").value);
+            var currentDate = new Date();
+
+            if (selectedDate < currentDate) {
+                alert("Randevu tarihi şu andan önce olamaz!");
+                sendPostRequest();
+            } else {
+                return;
+            }
+        }
+
+        function sendPostRequest() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/Home/Index', true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log("İstek başarıyla tamamlandı!");
+                    } else {
+                        console.error("İstekte bir hata oluştu.");
+                    }
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
 
 </body>
 </html>
