@@ -12,7 +12,7 @@
         <h2>Randevu Formu</h2>
         <form asp-controller="Appointment" asp-action="Create" method="post">
             <div class="form-group">
-                <label for="selectedClinic">Select a Clinic:</label>
+                <label for="selectedClinic">Klinik Seçin:</label>
                 @{
                     SelectList clinicList;
                     if (Model.Clinics != null)
@@ -24,10 +24,10 @@
                         clinicList = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
                     }
                 }
-                @Html.DropDownListFor(model => model.SelectedClinicId, clinicList, "Select a Clinic", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SelectedClinicId, clinicList, "Klinik", new { @class = "form-control" })
             </div>
             <div class="form-group">
-                <label for="selectedHospital">Select a Hospital:</label>
+                <label for="selectedHospital">Hastane Seçin:</label>
                 @{
                     SelectList hospitalList;
                     if (Model.Hospitals != null)
@@ -39,10 +39,10 @@
                         hospitalList = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
                     }
                 }
-                @Html.DropDownListFor(model => model.SelectedHospitalId, hospitalList, "Select a Hospital", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SelectedHospitalId, hospitalList, "Hastane", new { @class = "form-control" })
             </div>
             <div class="form-group">
-                <label for="selectedDoctor">Select a Doctor:</label>
+                <label for="selectedDoctor">Doktor Seçin:</label>
                 @{
                     SelectList doctorList;
                     if (Model.Doctors != null)
@@ -54,7 +54,7 @@
                         doctorList = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
                     }
                 }
-                @Html.DropDownListFor(model => model.SelectedDoctorId, doctorList, "Select a Doctor", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SelectedDoctorId, doctorList, "Doktor", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label for="Date">Randevu Tarihi:</label>

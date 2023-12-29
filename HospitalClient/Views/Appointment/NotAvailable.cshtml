@@ -1,20 +1,58 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tekrar Deneyin</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .centered-text {
+            text-align: center;
+            margin: 20px;
+        }
+
+            .centered-text p {
+                font-size: 18px;
+                color: #333;
+            }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            .btn:hover {
+                background-color: #2980b9;
+            }
+    </style>
 </head>
+
 <body>
     <div class="centered-text">
-        <p style="text-align:center">Almaya çalıştığınız randevu doktorun çalışma saatlerine uygun değildir. Aşağıdaki butona
+        <p>
+            Almaya çalıştığınız randevu doktorun çalışma saatlerine uygun değildir. Aşağıdaki butona
             basarak yeni bir randevu oluşturabilirsiniz.
         </p>
     </div>
 
     <div class="centered-text">
-        <a style="text-align:center" href="@Url.Action("Create", "Appointment")" class="btn btn-primary">Yeni Randevu Oluştur</a>
+        <a href="@Url.Action("Create", "Appointment")" class="btn">Yeni Randevu Oluştur</a>
     </div>
-
 </body>
+
 </html>
+

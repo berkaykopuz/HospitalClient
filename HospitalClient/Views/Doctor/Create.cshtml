@@ -2,7 +2,7 @@
 
 <form method="post" asp-action="Create">
     <div class="form-group">
-        <label asp-for="Name">Name</label>
+        <label asp-for="Name">Ad Soyad</label>
         <input asp-for="Name" class="form-control" placeholder="Name">
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
@@ -12,7 +12,7 @@
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="selectedHospital">Select a Hospital:</label>
+        <label for="selectedHospital">Hastane Seçin:</label>
         @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
     </div>
 

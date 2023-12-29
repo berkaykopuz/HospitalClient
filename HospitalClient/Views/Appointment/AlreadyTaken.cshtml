@@ -1,19 +1,55 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tekrar Deneyin</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .centered-text {
+            text-align: center;
+            margin: 20px;
+        }
+
+            .centered-text p {
+                font-size: 18px;
+                color: #333;
+            }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+    </style>
 </head>
+
 <body>
-<div class="centered-text">
-    <p style="text-align:center">Bu randevu zaten alındı. Aşağıdaki butona basarak tekrar oluşturabilirsiniz.</p>
-</div>
+    <div class="centered-text">
+        <p>Bu randevu zaten alındı. Aşağıdaki butona basarak tekrar oluşturabilirsiniz.</p>
+    </div>
 
-<div class="centered-text">
-    <a style="text-align:center" href="@Url.Action("Create", "Appointment")" class="btn btn-primary">Yeni Randevu Oluştur</a>
-</div>
-
+    <div class="centered-text">
+        <a href="@Url.Action("Create", "Appointment")" class="btn">Yeni Randevu Oluştur</a>
+    </div>
 </body>
+
 </html>
 
