@@ -28,16 +28,15 @@
         
 
         if (selectedDate < currentDate) {
-            alert("Çalışma tarihi şu andan önce olamaz!");
-            window.location.href = '/Home/Index';
+            sendPostRequest();
         } else {
-            return true;
+            return ;
         }
     }
 
     function sendPostRequest() {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", '/Home/YourAction', true);
+        xhr.open("POST", '/Home/Index', true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         xhr.onreadystatechange = function () {

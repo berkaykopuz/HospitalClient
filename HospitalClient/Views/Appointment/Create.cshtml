@@ -79,6 +79,7 @@
         function checkAppointmentDate() {
             var selectedDate = new Date(document.getElementById("Date").value);
             var currentDate = new Date();
+            var boolValue = false;
 
             if (selectedDate < currentDate) {
                 alert("Randevu tarihi şu andan önce olamaz!");
@@ -103,7 +104,7 @@
                 }
             };
 
-            xhr.send();
+            xhr.send(JSON.stringify({ boolParam: boolValue }));
         }
     </script>
 
