@@ -2,6 +2,36 @@
 
 <form method="post" asp-action="Create">
     <div class="form-group">
+        <label for="selectedClinic">Klinik Seçin:</label>
+        @{
+            SelectList clinicList;
+            if (Model.Clinics != null)
+            {
+                clinicList = new SelectList(Model.Clinics, "Id", "Name");
+            }
+            else
+            {
+                clinicList = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+            }
+        }
+        @Html.DropDownListFor(model => model.SelectedClinicId, clinicList, "Klinik", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="selectedHospital">Hastane Seçin:</label>
+        @{
+            SelectList hospitalList;
+            if (Model.Hospitals != null)
+            {
+                hospitalList = new SelectList(Model.Hospitals, "Id", "Name");
+            }
+            else
+            {
+                hospitalList = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+            }
+        }
+        @Html.DropDownListFor(model => model.SelectedHospitalId, hospitalList, "Hastane", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
         <label asp-for="Name">Ad Soyad</label>
         <input asp-for="Name" class="form-control" placeholder="Name">
         <span asp-validation-for="Name" class="text-danger"></span>
@@ -11,10 +41,15 @@
         <input asp-for="Email" class="form-control" placeholder="Email">
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label for="selectedHospital">Hastane Seçin:</label>
-        @Html.DropDownListFor(model => model.SelectedHospitalId, new SelectList(Model.Hospitals, "Id", "Name"), "Select a Hospital", new { @class = "form-control" })
-    </div>
-
-    <button type="submit" class="btn btn-primary">Oluştur</button>
+    @{
+        if (Model.Hospitals == null)
+        {
+            <button type="submit" class="btn btn-primary">Klinik Seç</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary">Oluştur</button>
+        }
+    }
+  
 </form>

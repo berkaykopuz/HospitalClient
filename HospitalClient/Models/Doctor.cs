@@ -11,6 +11,9 @@ namespace HospitalClient.Models
         public string Name { get; set; }
         [JsonPropertyName("email")]
         public string Email { get; set; }
+        [JsonPropertyName("clinic")]
+        public Clinic Clinic { get; set; }
+        [JsonPropertyName("hospital")]
 
         public Hospital Hospital { get; set; }
 

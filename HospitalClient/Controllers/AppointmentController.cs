@@ -58,6 +58,7 @@ namespace HospitalClient.Controllers
 
             if (_viewModel.SelectedClinicId != 0) // select clinic for getting hospitals
             {
+                TempData["ClinicId"] = _viewModel.SelectedClinicId;
 
                 HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("/api/HospitalClinic/GetHospitalsByClinicId/" + _viewModel.SelectedClinicId);
 
@@ -67,6 +68,7 @@ namespace HospitalClient.Controllers
                     var hospitals = JsonSerializer.Deserialize<List<Hospital>>(jsonString);
 
                     _viewModel.Hospitals = hospitals;
+                    
 
                     return View(_viewModel);
                 }
@@ -74,7 +76,9 @@ namespace HospitalClient.Controllers
 
             if (_viewModel.SelectedHospitalId != 0) // select hospital for getting doctors
             {
-                HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/GetDoctorsByHospitalId/" + _viewModel.SelectedHospitalId);
+                int clinicId = TempData.ContainsKey("ClinicId") ? (int)TempData["ClinicId"] : 0;
+
+                HttpResponseMessage doctorResponse = await _httpClient.GetAsync("/api/Doctor/GetDoctorsByHospitalAndClinicId/" + _viewModel.SelectedHospitalId + "/" + clinicId);
 
                 if (doctorResponse.IsSuccessStatusCode)
                 {
@@ -124,6 +128,8 @@ namespace HospitalClient.Controllers
                     }
                 }
 
+                request.date = request.date.AddHours(-3); //for turkey's regional timezone
+
                 HttpResponseMessage isTakenResponse = await _httpClient.PostAsJsonAsync("/api/Appointment/istaken", request);
                 if(isTakenResponse.IsSuccessStatusCode)
                 {
@@ -136,6 +142,7 @@ namespace HospitalClient.Controllers
                     }
                 }
 
+                
                 HttpResponseMessage appointmentResponse = await _httpClient.PostAsJsonAsync("api/Appointment/create", request);
 
 

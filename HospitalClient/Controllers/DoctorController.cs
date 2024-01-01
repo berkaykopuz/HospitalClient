@@ -17,6 +17,7 @@ namespace HospitalClient.Controllers
     public class DoctorController : Controller
     {
         private readonly HttpClient _httpClient;
+        private DoctorViewModel _doctorViewModel;
 
         public DoctorController()
         {
@@ -30,6 +31,8 @@ namespace HospitalClient.Controllers
             _httpClient.DefaultRequestHeaders.Accept.Add(
             new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
             );
+
+            _doctorViewModel = new DoctorViewModel();
         }
 
         
@@ -47,7 +50,8 @@ namespace HospitalClient.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> Create()
+
+        /*public async Task<IActionResult> Create()
         {
             var role = HttpContext.Session.GetString("role");
             if (role == null)
@@ -73,9 +77,8 @@ namespace HospitalClient.Controllers
             }
 
             return View();
-        }
+        }*/
 
-        [HttpPost]
         public async Task<IActionResult> Create(DoctorViewModel doctorViewModel)
         {
             var role = HttpContext.Session.GetString("role");
@@ -88,30 +91,63 @@ namespace HospitalClient.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View(doctorViewModel);
-            }
+            _doctorViewModel = doctorViewModel;
 
-            Doctor doctor = new Doctor
+            if(_doctorViewModel.SelectedClinicId != 0)
             {
-                Name = doctorViewModel.Name,
-                Email = doctorViewModel.Email,
-            };
-
-            HttpResponseMessage doctorResponse = await _httpClient.PostAsJsonAsync("api/Doctor/create?hospitalId=" + doctorViewModel.SelectedHospitalId, doctor);
-
-            if(doctorResponse.IsSuccessStatusCode)
-            {
-                Console.WriteLine(doctorResponse.Content);
-                return RedirectToAction("Index");
-            }
             
-           
+                HttpResponseMessage hospitalResponse = await _httpClient.GetAsync("/api/HospitalClinic/GetHospitalsByClinicId/" + _doctorViewModel.SelectedClinicId);
+
+                if (hospitalResponse.IsSuccessStatusCode)
+                {
+                    var jsonString = await hospitalResponse.Content.ReadAsStringAsync();
+                    var hospitals = System.Text.Json.JsonSerializer.Deserialize<List<Hospital>>(jsonString);
+
+                    _doctorViewModel.Hospitals = hospitals; 
+                    TempData["ClinicId"] = _doctorViewModel.SelectedClinicId;
+
+                    return View(_doctorViewModel);
+                }
+            }
+
+            if(_doctorViewModel.SelectedHospitalId != 0) //then create a new doctor
+            {
+                int clinicId = TempData.ContainsKey("ClinicId") ? (int)TempData["ClinicId"] : 0;
+
+                Doctor doctor = new Doctor
+                {
+                    Name = _doctorViewModel.Name,
+                    Email = _doctorViewModel.Email
+                };
+
+                HttpResponseMessage doctorResponse = await _httpClient.PostAsJsonAsync("/api/Doctor/create?hospitalId=" +
+                    _doctorViewModel.SelectedHospitalId + "&clinicId=" + clinicId, doctor);
+
+                if (doctorResponse.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Doctor başarıyla oluşturuldu!");
+                    return RedirectToAction("Index");
+                }
+            }
+
+            HttpResponseMessage clinicResponse = await _httpClient.GetAsync("/api/Clinic");
+
+            if (clinicResponse.IsSuccessStatusCode)
+            {
+                var jsonString = await clinicResponse.Content.ReadAsStringAsync();
+                var clinics = System.Text.Json.JsonSerializer.Deserialize<List<Clinic>>(jsonString);
+
+                _doctorViewModel.Clinics = clinics;
+
+                ModelState.Clear();
+
+                return View(_doctorViewModel);
+
+            }
+
+            ModelState.Clear();
+
             return View(doctorViewModel);
-
-
-
         }
 
         [HttpGet]

@@ -75,6 +75,10 @@ namespace HospitalClient.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
+            else
+            {
+                return View("LoginError");
+            }
 
             return View(loginResponse);
         }
